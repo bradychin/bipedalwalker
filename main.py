@@ -8,6 +8,7 @@ from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.callbacks import EvalCallback, StopTrainingOnRewardThreshold
 
+# -------------------------------- Environment setup -------------------------------- #
 # Import PyBullet environments the correct way for gymnasium
 try:
     # Try the new way first
@@ -18,7 +19,6 @@ except (ImportError, AttributeError):
     # Fallback: use a different environment that's guaranteed to work
     print("PyBullet Ant environment not available. Using BipedalWalker instead.")
     env_id = 'BipedalWalker-v3'  # Built into gymnasium
-
 
 # Alternative: If you want to stick with PyBullet, try this approach
 def create_pybullet_env():
@@ -34,7 +34,6 @@ def create_pybullet_env():
 
     # Fallback to a working environment
     return gym.make('BipedalWalker-v3')
-
 
 # Create environment - using BipedalWalker as it's more reliable
 def make_env():
@@ -52,11 +51,13 @@ env = DummyVecEnv([make_env()])
 # Separate environment for evaluation
 eval_env = gym.make('BipedalWalker-v3', render_mode='rgb_array')
 
+# -------------------------------- Training configuration -------------------------------- #
 # Adjust target score for BipedalWalker (different scoring than Ant)
 MAX_AVERAGE_SCORE = 300  # BipedalWalker target score
 
 print(f"Using environment: BipedalWalker-v3")
 print("This is a 2D bipedal robot that learns to walk - similar concept to the Ant!")
+
 
 # Neural network architecture for the policy
 policy_kwargs = dict(
@@ -64,6 +65,7 @@ policy_kwargs = dict(
     net_arch=[256, 256]  # Slightly smaller network for BipedalWalker
 )
 
+# -------------------------------- Agent / Policy creation -------------------------------- #
 # Create the PPO agent
 model = PPO(
     'MlpPolicy',
@@ -88,6 +90,7 @@ eval_callback = EvalCallback(
     best_model_save_path='./best_walker_model/'
 )
 
+# -------------------------------- Training -------------------------------- #
 print("Starting training...")
 print(f"Target score: {MAX_AVERAGE_SCORE}")
 print("The bipedal walker will learn to walk forward efficiently!")
@@ -115,6 +118,7 @@ try:
 
     print(f"Final mean reward: {mean_reward:.2f} +/- {std_reward:.2f}")
 
+# -------------------------------- Demonstration -------------------------------- #
     # Demonstrate the trained agent
     print("\nDemonstrating trained walker...")
     demo_env = gym.make('BipedalWalker-v3', render_mode='human')
@@ -135,6 +139,7 @@ try:
 
     demo_env.close()
 
+# -------------------------------- Clean up -------------------------------- #
 except KeyboardInterrupt:
     print("\nTraining interrupted by user.")
     model.save('ppo_walker_interrupted_model')
