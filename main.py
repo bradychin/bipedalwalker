@@ -9,39 +9,11 @@ from stable_baselines3.common.vec_env import DummyVecEnv
 from stable_baselines3.common.callbacks import EvalCallback, StopTrainingOnRewardThreshold
 
 # -------------------------------- Environment setup -------------------------------- #
-# Import PyBullet environments the correct way for gymnasium
-try:
-    # Try the new way first
-    import pybullet_envs.bullet.bullet_envs  # This registers the environments
-
-    env_id = 'AntBulletEnv-v0'
-except (ImportError, AttributeError):
-    # Fallback: use a different environment that's guaranteed to work
-    print("PyBullet Ant environment not available. Using BipedalWalker instead.")
-    env_id = 'BipedalWalker-v3'  # Built into gymnasium
-
-# Alternative: If you want to stick with PyBullet, try this approach
-def create_pybullet_env():
-    """Alternative way to create PyBullet environment"""
-    try:
-        # Direct PyBullet environment creation
-        import pybullet_envs.gym_locomotion_envs as locomotion_envs
-        from pybullet_envs.env_bases import MJCFBaseBulletEnv
-        # This is more complex - let's use the simpler approach below
-        pass
-    except:
-        pass
-
-    # Fallback to a working environment
-    return gym.make('BipedalWalker-v3')
-
-# Create environment - using BipedalWalker as it's more reliable
+# Create environment
 def make_env():
     def _init():
-        # BipedalWalker is a similar walking task and works reliably
         env = gym.make('BipedalWalker-v3', render_mode='rgb_array')
         return env
-
     return _init
 
 
@@ -56,39 +28,36 @@ eval_env = gym.make('BipedalWalker-v3', render_mode='rgb_array')
 MAX_AVERAGE_SCORE = 300  # BipedalWalker target score
 
 print(f"Using environment: BipedalWalker-v3")
-print("This is a 2D bipedal robot that learns to walk - similar concept to the Ant!")
+print("This is a 2D bipedal robot that learns to walk.")
 
 
 # Neural network architecture for the policy
-policy_kwargs = dict(
-    activation_fn=th.nn.LeakyReLU,
-    net_arch=[256, 256]  # Slightly smaller network for BipedalWalker
-)
+policy_kwargs = dict(activation_fn=th.nn.LeakyReLU,
+                     net_arch=[256, 256]
+                     )
 
 # -------------------------------- Agent / Policy creation -------------------------------- #
 # Create the PPO agent
-model = PPO(
-    'MlpPolicy',
-    env,
-    learning_rate=0.0003,
-    policy_kwargs=policy_kwargs,
-    verbose=1,
-    tensorboard_log="./ppo_walker_tensorboard/"
-)
+model = PPO('MlpPolicy',
+            env,
+            learning_rate=0.0003,
+            policy_kwargs=policy_kwargs,
+            verbose=1,
+            tensorboard_log="./ppo_walker_tensorboard/"
+            )
 
 # Callback to stop training when target reward is reached
 stop_callback = StopTrainingOnRewardThreshold(reward_threshold=MAX_AVERAGE_SCORE, verbose=1)
 
 # Evaluation callback
-eval_callback = EvalCallback(
-    eval_env,
-    callback_on_new_best=stop_callback,
-    eval_freq=5000,  # Evaluate every 5k steps
-    deterministic=True,
-    render=False,
-    verbose=1,
-    best_model_save_path='./best_walker_model/'
-)
+eval_callback = EvalCallback(eval_env,
+                             callback_on_new_best=stop_callback,
+                             eval_freq=5000,  # Evaluate every 5k steps
+                             deterministic=True,
+                             render=False,
+                             verbose=1,
+                             best_model_save_path='./best_walker_model/'
+                             )
 
 # -------------------------------- Training -------------------------------- #
 print("Starting training...")
@@ -97,10 +66,9 @@ print("The bipedal walker will learn to walk forward efficiently!")
 
 try:
     # Train the agent
-    model.learn(
-        total_timesteps=1000000,  # 1M steps should be enough for BipedalWalker
-        callback=eval_callback
-    )
+    model.learn(total_timesteps=1000000,  # 1M steps should be enough for BipedalWalker
+                callback=eval_callback
+                )
 
     print("Training completed!")
 
@@ -109,12 +77,11 @@ try:
 
     # Final evaluation
     print("\nFinal evaluation...")
-    mean_reward, std_reward = evaluate_policy(
-        model,
-        eval_env,
-        n_eval_episodes=10,
-        deterministic=True
-    )
+    mean_reward, std_reward = evaluate_policy(model,
+                                              eval_env,
+                                              n_eval_episodes=10,
+                                              deterministic=True
+                                              )
 
     print(f"Final mean reward: {mean_reward:.2f} +/- {std_reward:.2f}")
 
