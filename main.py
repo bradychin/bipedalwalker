@@ -7,7 +7,7 @@ from src.environment import make_vec_env, create_env
 from src.trainer import train_agent
 from src.evaluate import evaluate_agent
 from src.demo import demo_agent
-from utils.config import ENVIRONMENT, TRAINING
+from utils.config import ENVIRONMENT, TRAINING, PATHS
 
 # --------- Main function ---------#
 def main():
@@ -25,7 +25,7 @@ def main():
                 learning_rate=TRAINING['learning_rate'],
                 policy_kwargs=policy_kwargs,
                 verbose=1,
-                tensorboard_log=TRAINING['tensorboard_log'])
+                tensorboard_log=PATHS['tensorboard_log'])
 
     # --------- Run ---------#
     print(f'Using environment {ENVIRONMENT["environment_id"]}')

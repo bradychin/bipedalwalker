@@ -13,5 +13,5 @@ TRAINING = {
 
 PATHS = {
     'tensorboard_log': './ppo_walker_tensorboard',
-    'best_model_path': './best_walker_model'
+    'best_model_path': './models/best_walker_model'
 }

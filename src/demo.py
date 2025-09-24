@@ -1,5 +1,5 @@
 # --------- Import scripts ---------#
-from environment import create_env
+from src.environment import create_env
 
 # --------- Demonstration ---------#
 def demo_agent(model, max_steps=2000):
