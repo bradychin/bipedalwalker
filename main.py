@@ -1,5 +1,4 @@
 # --------- Import libraries ---------#
-import os
 import torch as th
 from stable_baselines3 import PPO
 
@@ -30,18 +29,15 @@ def main():
 
     # --------- Run ---------#
     print(f'Using environment {ENVIRONMENT["environment_id"]}')
-    model = train_agent(model, eval_env)
-    best_model_path = os.path.join(PATHS['best_model_path'], 'best_model.zip')
-    if os.path.exists(best_model_path):
-        print("Loading best model for evaluation and demo...")
-        best_model = PPO.load(best_model_path)
-        evaluate_agent(best_model, eval_env)
-        demo_agent(best_model)
-    else:
-        print("Best model not found, using final training model...")
-        evaluate_agent(model, eval_env)
-        demo_agent(model)
 
+    # Training
+    model = train_agent(model, eval_env)
+
+    # Evaluate and demo
+    evaluate_agent(model, eval_env)
+    demo_agent(model)
+
+    # Close environment
     env.close()
     eval_env.close()
     print('done')

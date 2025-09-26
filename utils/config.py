@@ -1,6 +1,5 @@
 ENVIRONMENT = {
-    'environment_id': 'BipedalWalker-v3',
-    'render_mode_train': 'rgb_array',
+    'environment_id': 'BipedalWalker-v3'
 }
 
 TRAINING = {
@@ -12,6 +11,6 @@ TRAINING = {
 }
 
 PATHS = {
-    'tensorboard_log': './ppo_walker_tensorboard',
-    'best_model_path': './models/best_walker_model'
+    'tensorboard_log': './models/tensorboards',
+    'best_model_path': './models/best_models'
 }
