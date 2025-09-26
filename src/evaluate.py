@@ -7,7 +7,7 @@ logger = get_logger(__name__)
 
 # --------- Evaluation ---------#
 def evaluate_agent(model, eval_env, n_episodes=10):
-    logger.info("\nFinal evaluation...")
+    logger.info("Final evaluation...")
     mean_reward, std_reward = evaluate_policy(model,
                                               eval_env,
                                               n_eval_episodes=n_episodes,

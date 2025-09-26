@@ -1,0 +1,18 @@
+2025.09.25_23-38-38 INFO: main.py -> Starting PPO training pipeline.
+2025.09.25_23-38-38 INFO: main.py -> Creating environment.
+2025.09.25_23-38-39 INFO: environment.py -> Using BipedalWalker-v3
+2025.09.25_23-38-39 INFO: main.py -> Environment created.
+2025.09.25_23-38-40 INFO: trainer.py -> Training target: 300 reward.
+2025.09.25_23-38-40 INFO: trainer.py -> Max timesteps: 1000000
+2025.09.25_23-38-40 INFO: trainer.py -> Starting training...
+2025.09.25_23-44-48 INFO: trainer.py -> Training completed!
+2025.09.25_23-44-48 INFO: trainer.py -> Using best model...
+2025.09.25_23-44-48 INFO: functions.py -> Archiving previous model with timestamp: 2025.09.25_23-44-48.
+2025.09.25_23-44-48 INFO: functions.py -> Archiving previous tensorboard logs with timestamp: 2025.09.25_23-44-48.
+2025.09.25_23-44-48 INFO: evaluate.py -> Final evaluation...
+2025.09.25_23-44-49 INFO: evaluate.py -> Final mean reward: 201.86 +/- 131.24
+2025.09.25_23-44-49 INFO: demo.py -> Demonstrating trained walker...
+2025.09.25_23-44-49 INFO: environment.py -> Using BipedalWalker-v3
+2025.09.25_23-45-12 INFO: demo.py -> Episode finished after 494 steps with total reward: 42.19
+2025.09.25_23-45-52 INFO: demo.py -> Episode finished after 1451 steps with total reward: 302.86
+2025.09.25_23-46-26 INFO: main.py -> Training pipeline completed successfully.
