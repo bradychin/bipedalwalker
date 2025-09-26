@@ -1,19 +1,24 @@
-# --------- Import libraries ---------#
+# --------- Third-party imports ---------#
 import torch as th
 from stable_baselines3 import PPO
 
-# --------- Import scripts ---------#
+# --------- Local imports ---------#
 from src.environment import make_vec_env, create_env
 from src.trainer import train_agent
 from src.evaluate import evaluate_agent
 from src.demo import demo_agent
-from utils.config import ENVIRONMENT, TRAINING, PATHS
+from utils.config import TRAINING, PATHS
+from utils.logger import get_logger
+logger = get_logger(__name__)
 
 # --------- Main function ---------#
 def main():
+    logger.info('Starting PPO training pipeline.')
     # --------- Setup ---------#
+    logger.info('Creating environment.')
     env = make_vec_env()
     eval_env = create_env(render_mode='rgb_array')
+    logger.info('Environment created.')
 
     # Neural network architecture for the policy
     policy_kwargs = dict(activation_fn=th.nn.LeakyReLU,
@@ -28,8 +33,6 @@ def main():
                 tensorboard_log=PATHS['tensorboard_log'])
 
     # --------- Run ---------#
-    print(f'Using environment {ENVIRONMENT["environment_id"]}')
-
     # Training
     model = train_agent(model, eval_env)
 
@@ -40,22 +43,7 @@ def main():
     # Close environment
     env.close()
     eval_env.close()
-    print('done')
+    logger.info('Training pipeline completed successfully.')
 
 if __name__ == '__main__':
     main()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
